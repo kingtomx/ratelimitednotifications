@@ -1,5 +1,6 @@
 package com.tpg.ratelimitednotifications.controller.rest;
 
+import com.tpg.ratelimitednotifications.entity.NotificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,10 +25,10 @@ public class NotificationController {
             return "Error: Invalid notification type";
         }
 
-        String cacheKey = recipient + "_" + notificationType;
+        String cacheKey = String.format("%s_%s", recipient, notificationType);
         Integer count = (Integer)redisTemplate.opsForValue().get(cacheKey);
         if (count != null && count >= limit) {
-            return "Error: Rate limit exceeded for " + notificationType + " notifications";
+            return String.format("Error: Rate limit exceeded for %s notifications", notificationType);
         }
 
         redisTemplate.opsForValue().increment(cacheKey, 1);
@@ -39,49 +40,21 @@ public class NotificationController {
     }
 
     private int getLimit(String notificationType) {
-        switch (notificationType) {
-            case "Status":
-                return 2; // Not more than 2 per minute
-            case "News":
-                return 1; // Not more than 1 per day
-            case "Marketing":
-                return 3; // Not more than 3 per hour
-            default:
-                return -1; // Invalid notification type
-        }
+        return switch (notificationType) {
+            case "Status" -> 2; // Not more than 2 per minute
+            case "News" -> 1; // Not more than 1 per day
+            case "Marketing" -> 3; // Not more than 3 per hour
+            default -> -1; // Invalid notification type
+        };
     }
 
     private long getExpiration(String notificationType) {
-        switch (notificationType) {
-            case "Status":
-                return 60; // 1 minute
-            case "News":
-                return 86400; // 1 day
-            case "Marketing":
-                return 3600; // 1 hour
-            default:
-                return 0;
-        }
+        return switch (notificationType) {
+            case "Status" -> 60; // 1 minute
+            case "News" -> 86400; // 1 day
+            case "Marketing" -> 3600; // 1 hour
+            default -> 0;
+        };
     }
 
-    static class NotificationRequest {
-        private String recipient;
-        private String notificationType;
-
-        public String getRecipient() {
-            return recipient;
-        }
-
-        public void setRecipient(String recipient) {
-            this.recipient = recipient;
-        }
-
-        public String getNotificationType() {
-            return notificationType;
-        }
-
-        public void setNotificationType(String notificationType) {
-            this.notificationType = notificationType;
-        }
-    }
 }
