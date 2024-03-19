@@ -47,3 +47,5 @@ curl -X POST -H "Content-Type: application/json" -d '{"recipient": "user@example
 This will send a POST request to the `/sendNotification` endpoint of the service with a JSON object containing recipient information and notification type.
 
 You will receive a response indicating whether the notification was successfully sent or if the rate limit for the notification type was exceeded.
+
+In terms of horizontal scalability, to ensure this app can be running several instances in parallel, we could provide a separated Redis container using a docker compose (for example) but to make it easy to test I decided to maintain everything inside the same container. 
