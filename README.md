@@ -1,70 +1,49 @@
-Rate Limited Notifications
+# Ratelimitednotifications Service
 
-This application provides an API endpoint for sending notifications while enforcing rate limits based on the notification type. It is built using Spring Boot and utilizes Redis for rate limiting.
-Installation
+This is a sample service that uses Spring Boot and Redis to send rate-limited notifications.
 
-To run this application locally, follow these steps:
+## Run the Service
 
-    Clone the repository:
+### Build the Docker Container
 
-    bash
+To build the Docker container, make sure you have Docker installed on your system and follow these steps:
 
-git clone https://github.com/your-username/rate-limited-notifications.git
+1. Clone the repository:
 
-Navigate to the project directory:
+    ```bash
+    git clone https://github.com/your-user/ratelimitednotifications.git
+    ```
 
-bash
+2. Navigate to the project directory:
 
-cd rate-limited-notifications
+    ```bash
+    cd ratelimitednotifications
+    ```
 
-Build the project:
+3. Build the Docker container by running the following command:
 
-bash
+    ```bash
+    docker build -t ratelimitednotifications .
+    ```
 
-mvn clean package
+### Run the Docker Container
 
-Run the application:
+Once the Docker container has been built, you can run it with the following command:
 
-bash
+```bash
+docker run -d -p 8080:8080 -p 6379:6379 ratelimitednotifications
+```
 
-    java -jar target/rate-limited-notifications.jar
+This will start the container in the background, exposing ports 8080 and 6379 on your local machine.
 
-Usage
+## Make a Call to the Service
 
-Once the application is running, you can send notifications by making a POST request to the /sendNotification endpoint with a JSON payload containing the recipient and notification type.
+To make a call to the service using cURL, you can run the following command in your terminal:
 
-Example request:
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"recipient": "user@example.com", "notificationType": "Status"}' http://localhost:8080/sendNotification
+```
 
-http
+This will send a POST request to the `/sendNotification` endpoint of the service with a JSON object containing recipient information and notification type.
 
-POST /sendNotification
-Content-Type: application/json
-
-{
-"recipient": "example@example.com",
-"notificationType": "Status"
-}
-
-Rate Limits
-
-Notifications are subject to the following rate limits based on the notification type:
-
-    Status: Not more than 2 per minute.
-    News: Not more than 1 per day.
-    Marketing: Not more than 3 per hour.
-
-If the rate limit is exceeded for a particular notification type, an error message will be returned.
-Dependencies
-
-This application utilizes the following dependencies:
-
-    Spring Boot
-    Redis
-    Maven
-
-Configuration
-
-The rate limits and expiration times for each notification type can be configured in the NotificationController class.
-License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+You will receive a response indicating whether the notification was successfully sent or if the rate limit for the notification type was exceeded.

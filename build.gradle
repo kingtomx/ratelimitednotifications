@@ -27,4 +27,5 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	jvmArgs = ["-Djdk.instrument.traceUsage=enabled", "-XX:+EnableDynamicAgentLoading", "-Xshare:off"]
 }
