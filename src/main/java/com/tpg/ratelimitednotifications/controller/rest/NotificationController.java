@@ -26,7 +26,7 @@ public class NotificationController {
         if (limit <= 0) {
             return "Error: Invalid notification type";
         }
-        String cacheKey = String.format("%s_%s", recipient, notificationType);
+        String cacheKey = String.format("%s=%s", recipient, notificationType);
         Integer count = (Integer)redisTemplate.opsForValue().get(cacheKey);
         if (count != null && count >= limit) {
             return String.format("Error: Rate limit exceeded for %s notifications", notificationType);

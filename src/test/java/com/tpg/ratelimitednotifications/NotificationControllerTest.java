@@ -46,15 +46,15 @@ class NotificationControllerTest {
 		String recipient = "user@example.com";
 		String notificationType = "Status";
 		NotificationRequest request = new NotificationRequest(recipient, notificationType);
-		when(valueOperations.get(recipient + "_" + notificationType)).thenReturn(1);
+		when(valueOperations.get(recipient + "=" + notificationType)).thenReturn(1);
 
 		String result = notificationController.sendNotification(request);
 
 		logger.info("Verifying results for testSendNotificationStatusWithinLimit");
 		assertEquals("Notification sent successfully", result);
-		verify(valueOperations).increment(recipient + "_" + notificationType, 1);
-		verify(valueOperations).get(recipient + "_" + notificationType);
-		verify(redisTemplate).expire(recipient + "_" + notificationType, 60L, TimeUnit.SECONDS);
+		verify(valueOperations).increment(recipient + "=" + notificationType, 1);
+		verify(valueOperations).get(recipient + "=" + notificationType);
+		verify(redisTemplate).expire(recipient + "=" + notificationType, 60L, TimeUnit.SECONDS);
 		logger.info("testSendNotificationStatusWithinLimit completed successfully");
 	}
 
@@ -64,14 +64,14 @@ class NotificationControllerTest {
 		String recipient = "user@example.com";
 		String notificationType = "Status";
 		NotificationRequest request = new NotificationRequest(recipient, notificationType);
-		when(valueOperations.get(recipient + "_" + notificationType)).thenReturn(2);
+		when(valueOperations.get(recipient + "=" + notificationType)).thenReturn(2);
 
 		String result = notificationController.sendNotification(request);
 		String expectedErrorMessage = "Error: Rate limit exceeded for Status notifications";
 
 		logger.info("Verifying results for testSendNotificationStatusExceedingLimit");
 		assertEquals(expectedErrorMessage, result);
-		verify(valueOperations).get(recipient + "_" + notificationType);
+		verify(valueOperations).get(recipient + "=" + notificationType);
 		verify(valueOperations, never()).increment(anyString(), anyInt());
 		verify(redisTemplate, never()).expire(anyString(), anyLong(), any());
 		logger.info("testSendNotificationStatusExceedingLimit completed successfully");
@@ -83,15 +83,15 @@ class NotificationControllerTest {
 		String recipient = "user@example.com";
 		String notificationType = "News";
 		NotificationRequest request = new NotificationRequest(recipient, notificationType);
-		when(valueOperations.get(recipient + "_" + notificationType)).thenReturn(0);
+		when(valueOperations.get(recipient + "=" + notificationType)).thenReturn(0);
 
 		String result = notificationController.sendNotification(request);
 
 		logger.info("Verifying results for testSendNotificationNewsWithinLimit");
 		assertEquals("Notification sent successfully", result);
-		verify(valueOperations).increment(recipient + "_" + notificationType, 1);
-		verify(valueOperations).get(recipient + "_" + notificationType);
-		verify(redisTemplate).expire(recipient + "_" + notificationType, 86400L, TimeUnit.SECONDS);
+		verify(valueOperations).increment(recipient + "=" + notificationType, 1);
+		verify(valueOperations).get(recipient + "=" + notificationType);
+		verify(redisTemplate).expire(recipient + "=" + notificationType, 86400L, TimeUnit.SECONDS);
 		logger.info("testSendNotificationNewsWithinLimit completed successfully");
 	}
 
@@ -101,14 +101,14 @@ class NotificationControllerTest {
 		String recipient = "user@example.com";
 		String notificationType = "News";
 		NotificationRequest request = new NotificationRequest(recipient, notificationType);
-		when(valueOperations.get(recipient + "_" + notificationType)).thenReturn(1);
+		when(valueOperations.get(recipient + "=" + notificationType)).thenReturn(1);
 
 		String result = notificationController.sendNotification(request);
 		String expectedErrorMessage = "Error: Rate limit exceeded for News notifications";
 
 		logger.info("Verifying results for testSendNotificationNewsExceedingLimit");
 		assertEquals(expectedErrorMessage, result);
-		verify(valueOperations).get(recipient + "_" + notificationType);
+		verify(valueOperations).get(recipient + "=" + notificationType);
 		verify(valueOperations, never()).increment(anyString(), anyInt());
 		verify(redisTemplate, never()).expire(anyString(), anyLong(), any());
 		logger.info("testSendNotificationNewsExceedingLimit completed successfully");
@@ -120,15 +120,15 @@ class NotificationControllerTest {
 		String recipient = "user@example.com";
 		String notificationType = "Marketing";
 		NotificationRequest request = new NotificationRequest(recipient, notificationType);
-		when(valueOperations.get(recipient + "_" + notificationType)).thenReturn(2);
+		when(valueOperations.get(recipient + "=" + notificationType)).thenReturn(2);
 
 		String result = notificationController.sendNotification(request);
 
 		logger.info("Verifying results for testSendNotificationMarketingWithinLimit");
 		assertEquals("Notification sent successfully", result);
-		verify(valueOperations).increment(recipient + "_" + notificationType, 1);
-		verify(valueOperations).get(recipient + "_" + notificationType);
-		verify(redisTemplate).expire(recipient + "_" + notificationType, 3600L, TimeUnit.SECONDS);
+		verify(valueOperations).increment(recipient + "=" + notificationType, 1);
+		verify(valueOperations).get(recipient + "=" + notificationType);
+		verify(redisTemplate).expire(recipient + "=" + notificationType, 3600L, TimeUnit.SECONDS);
 		logger.info("testSendNotificationMarketingWithinLimit completed successfully");
 	}
 
@@ -138,14 +138,14 @@ class NotificationControllerTest {
 		String recipient = "user@example.com";
 		String notificationType = "Marketing";
 		NotificationRequest request = new NotificationRequest(recipient, notificationType);
-		when(valueOperations.get(recipient + "_" + notificationType)).thenReturn(3);
+		when(valueOperations.get(recipient + "=" + notificationType)).thenReturn(3);
 
 		String result = notificationController.sendNotification(request);
 		String expectedErrorMessage = "Error: Rate limit exceeded for Marketing notifications";
 
 		logger.info("Verifying results for testSendNotificationMarketingExceedingLimit");
 		assertEquals(expectedErrorMessage, result);
-		verify(valueOperations).get(recipient + "_" + notificationType);
+		verify(valueOperations).get(recipient + "=" + notificationType);
 		verify(valueOperations, never()).increment(anyString(), anyInt());
 		verify(redisTemplate, never()).expire(anyString(), anyLong(), any());
 		logger.info("testSendNotificationMarketingExceedingLimit completed successfully");
