@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.tpg.ratelimitednotifications"},{"l":"com.tpg.ratelimitednotifications.configuration"},{"l":"com.tpg.ratelimitednotifications.controller.rest"},{"l":"com.tpg.ratelimitednotifications.entity"},{"l":"com.tpg.ratelimitednotifications.enums"}];updateSearchResults();
